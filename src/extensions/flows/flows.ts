@@ -45,16 +45,7 @@ export class Flows {
   }
 
   async run(seeders: ComponentID[], name = 'build', options?: Partial<ExecutionOptions>, network?: Network) {
-    network = network || this.createNetworkByFlowName(seeders, name);
-    const opts = Object.assign(
-      {
-        caching: true,
-        concurrency: 4,
-        traverse: 'both'
-      },
-      options
-    );
-    const resultStream = await network.execute(opts);
+    const resultStream = await this.runStream(seeders, name, options, network);
     return new Promise((resolve, reject) => {
       resultStream.subscribe({
         next(data: any) {
