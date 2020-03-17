@@ -32,7 +32,9 @@ export class RunCmd implements Command {
     const concurrencyN = concurrency && typeof concurrency === 'string' ? Number.parseInt(concurrency) : 5;
     const actualComps = typeof components === 'string' ? [components] : components;
     const comps = this.flows.getIds(actualComps);
+    console.log('hello run stream');
     const result = await this.flows.runStream(comps, 'build', { concurrency: concurrencyN });
+    console.log('after run stream');
     const report = await handleRunStream(result, this.reporter);
     return <Report props={report} />;
   }

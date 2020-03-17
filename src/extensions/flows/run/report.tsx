@@ -2,5 +2,5 @@
 import React from 'react';
 
 export function Report(info: any) {
-  return <div></div>;
+  return <div>Hello Report!</div>;
 }
