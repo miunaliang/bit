@@ -69,6 +69,21 @@ export class Flows {
       });
     });
   }
+
+  async runStream(seeders: ComponentID[], name = 'build', options?: Partial<ExecutionOptions>, network?: Network) {
+    network = network || this.createNetworkByFlowName(seeders, name);
+    const opts = Object.assign(
+      {
+        caching: true,
+        concurrency: 4,
+        traverse: 'both'
+      },
+      options
+    );
+    const resultStream = await network.execute(opts);
+    return resultStream;
+  }
+
   async runMultiple(flowsWithIds: IdsAndFlows, capsules: Capsule[], options?: Partial<ExecutionOptions>) {
     const getFlow = (capsule: Capsule) => {
       const id = capsule.component.id;
