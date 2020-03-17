@@ -2,16 +2,16 @@ import { ReplaySubject } from 'rxjs';
 import { Reporter } from '../../reporter';
 
 export async function handleRunStream(stream: ReplaySubject<any>, reporter: Reporter) {
-  const summery: { [k: string]: string } = {};
+  const summary: { [k: string]: string } = {};
   const streamPromise = await new Promise(resolve =>
     stream.subscribe({
       next(networkData: any) {
         if (networkData instanceof ReplaySubject) {
-          handleFlowStream(networkData, reporter, summery);
+          handleFlowStream(networkData, reporter, summary);
         } else if (networkData.type === 'network:start') {
           reporter.createLogger('run-infra').log('****** started execution *****');
         } else if (networkData.type === 'network:result') {
-          summery['network:result'] = networkData;
+          summary['network:result'] = networkData;
           reporter.createLogger('run-infra').log('****** finished execution *****');
         } else {
           reporter.createLogger('run-infra').warn(`~~~~~~ Got ${networkData.type} on ${networkData.id}~~~~~~`);
@@ -20,10 +20,10 @@ export async function handleRunStream(stream: ReplaySubject<any>, reporter: Repo
       complete() {
         console.log('summery');
         debugger;
-        resolve(summery);
+        resolve(summary);
       },
       error() {
-        resolve(summery);
+        resolve(summary);
       }
     })
   );
